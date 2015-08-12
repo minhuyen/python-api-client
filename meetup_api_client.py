@@ -45,7 +45,8 @@ PHOTO_URI = 'photo'
 MEMBER_PHOTO_URI = '2/member_photo'
 
 API_BASE_URL = 'http://api.meetup.com/'
-OAUTH_BASE_URL = 'http://www.meetup.com/'
+OAUTH_BASE_URL = 'https://api.meetup.com/'
+OAUTH_AUTHENTICATION_URL = 'https://secure.meetup.com/'
 
 
 signature_method_plaintext = oauth.OAuthSignatureMethod_PLAINTEXT()
@@ -151,14 +152,14 @@ class MeetupOAuthSession:
             callbackUrl = "&" + urlencode({"oauth_callback":oauth_callback})
         else:
             callbackUrl = ""
-        return OAUTH_BASE_URL + "authorize/?oauth_token=%s%s" % (self.request_token.key, callbackUrl)
+        return OAUTH_AUTHENTICATION_URL + "authorize/?oauth_token=%s%s" % (self.request_token.key, callbackUrl)
 
     def get_authenticate_url(self, oauth_callback=None):
         if oauth_callback:
             callbackUrl = "&" + urlencode({"oauth_callback":oauth_callback})
         else:
             callbackUrl = ""
-        return OAUTH_BASE_URL + "authenticate/?oauth_token=%s%s" % (self.request_token.key, callbackUrl)
+        return OAUTH_AUTHENTICATION_URL + "authenticate/?oauth_token=%s%s" % (self.request_token.key, callbackUrl)
 
     def fetch_access_token(self, oauth_verifier, signature_method=signature_method_hmac, request_token=None):
         temp_request_token = request_token or self.request_token
