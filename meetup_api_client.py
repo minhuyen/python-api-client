@@ -48,7 +48,6 @@ API_BASE_URL = 'http://api.meetup.com/'
 OAUTH_BASE_URL = 'https://api.meetup.com/'
 OAUTH_AUTHENTICATION_URL = 'https://secure.meetup.com/'
 
-
 signature_method_plaintext = oauth.OAuthSignatureMethod_PLAINTEXT()
 signature_method_hmac = oauth.OAuthSignatureMethod_HMAC_SHA1()
 
@@ -141,8 +140,9 @@ class MeetupOAuthSession:
         self.access_token = access_token
 
     def fetch_request_token(self, callback="oob", signature_method=signature_method_hmac):
+        parameters = {"scope": "messaging"}
         oauth_req = oauth.OAuthRequest.from_consumer_and_token(
-            self.consumer, http_url=(OAUTH_BASE_URL + 'oauth/request/'), callback=callback)
+            self.consumer, http_url=(OAUTH_BASE_URL + 'oauth/request/?scope=messaging'), callback=callback, parameters=parameters)
         oauth_req.sign_request(signature_method, self.consumer, None)
         token_string = urlopen(Request(oauth_req.http_url, headers=oauth_req.to_header())).read()
         self.request_token = oauth.OAuthToken.from_string(token_string)
